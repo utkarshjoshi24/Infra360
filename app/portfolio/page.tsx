@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '../../components/Button';
+import { OptimizedImage } from '../../components/OptimizedImage';
 import { portfolioData, PortfolioItem } from '../../data/portfolio';
 
 export default function PortfolioPage() {
@@ -149,31 +150,31 @@ export default function PortfolioPage() {
         {viewMode === 'grid' ? (
           /* Grid View Layout */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, idx) => (
               <div 
                 key={item.id}
                 onClick={() => setActiveProject(item)}
                 className="group bg-surface border border-outline hover:border-cobalt transition-all duration-500 overflow-hidden cursor-pointer flex flex-col justify-between shadow-xl"
               >
-                {/* Image Container with Lazy Load */}
+                {/* Image Container with Optimized Lazy Load & Preload */}
                 <div className="relative aspect-[16/11] overflow-hidden bg-surface-lowest">
-                  <img 
+                  <OptimizedImage 
                     src={item.image} 
                     alt={item.title} 
-                    loading="lazy"
-                    decoding="async"
+                    priority={idx < 3}
+                    containerClassName="w-full h-full"
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105"
                   />
                   
                   {/* Category Pill */}
-                  <div className="absolute top-3 left-3 bg-void/80 border border-outline/70 px-2.5 py-1 backdrop-blur-md">
+                  <div className="absolute top-3 left-3 bg-void/80 border border-outline/70 px-2.5 py-1 backdrop-blur-md z-10">
                     <span className="font-mono text-[10px] uppercase tracking-wider text-ice font-semibold">
                       {item.categoryLabel}
                     </span>
                   </div>
 
                   {item.metrics && (
-                    <div className="absolute bottom-3 right-3 bg-void/90 border border-cobalt/40 px-3 py-1 backdrop-blur-md flex items-center gap-1.5 font-mono text-xs">
+                    <div className="absolute bottom-3 right-3 bg-void/90 border border-cobalt/40 px-3 py-1 backdrop-blur-md flex items-center gap-1.5 font-mono text-xs z-10">
                       <span className="text-on-surface-muted text-[10px] uppercase">{item.metrics.label}:</span>
                       <span className="text-ice font-bold">{item.metrics.value}</span>
                     </div>
@@ -225,10 +226,10 @@ export default function PortfolioPage() {
               >
                 <div className="md:col-span-4 flex items-center gap-4">
                   <div className="w-16 h-12 relative overflow-hidden flex-shrink-0 bg-surface-lowest border border-outline">
-                    <img 
+                    <OptimizedImage 
                       src={item.image} 
                       alt={item.title} 
-                      loading="lazy" 
+                      containerClassName="w-full h-full"
                       className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
                     />
                   </div>
@@ -295,9 +296,10 @@ export default function PortfolioPage() {
             </div>
 
             <div className="aspect-[16/9] w-full overflow-hidden mb-6 border border-outline bg-surface-lowest">
-              <img 
+              <OptimizedImage 
                 src={activeProject.image} 
                 alt={activeProject.title} 
+                containerClassName="w-full h-full"
                 className="w-full h-full object-cover"
               />
             </div>

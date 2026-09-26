@@ -3,6 +3,7 @@ import './globals.css';
 import { Space_Grotesk, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
+import { ImagePreloader } from '../components/ImagePreloader';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -72,6 +73,7 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} bg-void text-on-surface antialiased selection:bg-cobalt selection:text-white`}
       >
+        <ImagePreloader />
         <Navbar />
         <main className="w-full min-h-screen">
           {children}
